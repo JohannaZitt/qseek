@@ -118,12 +118,13 @@ class WaveformImage:
         """
         if not self.has_traces():
             return
-        if self.sampling_rate == sampling_rate:
-            return
-
-        downsample = self.sampling_rate > sampling_rate
 
         for tr in self.traces:
+            trace_sampling_rate = 1.0 / tr.deltat
+            if trace_sampling_rate == sampling_rate:
+                continue
+
+            downsample = trace_sampling_rate > sampling_rate
             resample(tr, sampling_rate)
 
             if max_normalize and downsample:
